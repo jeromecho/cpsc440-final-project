@@ -9,6 +9,20 @@ import numpy as np
 import argparse
 from models.svqvae import SVQVAE
 import json
+import matplotlib.pyplot as plt
+
+def show_reconstructed_image(original, reconstructed, epoch, step):
+    # Convert the tensors to numpy arrays
+    original = original.cpu().detach().numpy().transpose(0, 2, 3, 1)
+    reconstructed = reconstructed.cpu().detach().numpy().transpose(0, 2, 3, 1)
+
+    # Display first image in batch (you can modify this if you want to show more images)
+    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+    ax[0].imshow(original[0])
+    ax[0].set_title('Original')
+    ax[1].imshow(reconstructed[0])
+    ax[1].set_title('Reconstructed')
+    plt.show()
 
 def get_pretrain_dataset(name):
     info = data['pretrain'][name]
@@ -16,6 +30,7 @@ def get_pretrain_dataset(name):
     std = info['std']
     
     if name=='cam16':
+        crop_size = (2000, 2000)
         transform = transforms.Compose([
             transforms.ToTensor(),
             transforms.RandomRotation(180),
@@ -23,6 +38,7 @@ def get_pretrain_dataset(name):
             transforms.Resize((512,512), antialias=True)
         ])
     elif name=='prcc':
+        crop_size = None
         transform = transforms.Compose([
             transforms.ToTensor(),
             transforms.RandomRotation(180),
@@ -32,7 +48,7 @@ def get_pretrain_dataset(name):
     
     datasets = []
     for folder in info['paths']:
-        dataset = PretrainingDataset(img_dir=folder, transform=transform)
+        dataset = PretrainingDataset(img_dir=folder, transform=transform, crop_size=crop_size)
         datasets.append(dataset)
         
     dataset = ConcatDataset(datasets)
@@ -206,11 +222,20 @@ if __name__ == '__main__':
             
                 
             optimizer.step()
+
+            # TODO: for viewing reconstructed images
+            """
+            if (step + 1) % 100 == 0:
+                show_reconstructed_image(image_batch, recon, e, step)
+                logging.info(f"{f'step {step + 1}':-^{50}}")
+                for k, v in losses.items():
+                    logging.info(f'avg {k}: {v[-1] / (step + 1)}')
             
             if (step+1)%10 == 0 :
                 logging.info(f"{f'step {step+1}':-^{50}}")
                 for k, v in losses.items():
                     logging.info(f'avg {k}: {v[-1]/(step+1)}')
+            """
   
         scheduler.step()
         
