@@ -1,4 +1,5 @@
 import torch
+import sys
 from torchvision import transforms
 from step1_analyze_data import PretrainingDataset
 from torch.utils.data import DataLoader, ConcatDataset, WeightedRandomSampler
@@ -164,7 +165,7 @@ if __name__ == '__main__':
     weights = [1.0]*len(cam16_ds) + [4.0]*len(prcc_ds)
     sampler = WeightedRandomSampler(weights, num_samples = len(merged_ds), replacement=True)
     
-    pretrain_loader = DataLoader(merged_ds, batch_size=batch_size, sampler=sampler, num_workers=2)
+    pretrain_loader = DataLoader(merged_ds, batch_size=batch_size, sampler=sampler, num_workers=0) # CHANGED!
 
     
     optimizer = torch.optim.AdamW(model.parameters(), lr=1.5e-4, weight_decay=0.05, betas=(0.9, 0.95))
@@ -254,3 +255,6 @@ if __name__ == '__main__':
                 json.dump(losses, f)
                 
             logging.info(f'saving checkpoint and losses after episode {e}')
+
+logging.info("training complete!")
+plt.close()

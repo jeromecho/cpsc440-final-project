@@ -29,20 +29,8 @@ class PretrainingDataset(Dataset):
             width, height = img.size
             image = None
 
-            if self.crop_size is not None:
-                crop_w, crop_h = self.crop_size
-                if width >= crop_w and height >= crop_h:
-                    # 🎯 Random top-left coordinates for cropping
-                    left = random.randint(0, width - crop_w)
-                    upper = random.randint(0, height - crop_h)
-                    crop_box = (left, upper, left + crop_w, upper + crop_h)
-                    image = img.crop(crop_box).convert('RGB')
-                else:
-                    print(f"WARNING: Skipping crop for image {img_path} (too small for crop size)")
-                    image = img.convert('RGB')  # Fallback: use full image
 
-            else:
-                image = img.convert('RGB')
+            image = img.convert('RGB')
 
         if self.transform:
             image = self.transform(image)
