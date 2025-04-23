@@ -59,7 +59,7 @@ if __name__ == '__main__':
     method = args.method
     
     current_time = datetime.datetime.now().strftime('%m%d_%H%M%S')
-    directory_name = f"runs/pretrain-seqdual-{method}-b{batch_size}-e{svqvae1_epochs}-{svqvae2_epochs}-s{level_stagger_epochs}-" + current_time
+    directory_name = f"/scratch/st-sielmann-1/semi-supervised/pretrain-seqdual-{method}-b{batch_size}-e{svqvae1_epochs}-{svqvae2_epochs}-s{level_stagger_epochs}-" + current_time
     os.makedirs(directory_name, exist_ok=True)
     checkpoints_directory = os.path.join(directory_name, "checkpoints")
     os.makedirs(checkpoints_directory, exist_ok=True)
