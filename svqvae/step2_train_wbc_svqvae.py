@@ -63,7 +63,7 @@ if __name__ == '__main__':
     exec(configs, vars(model_config))
     
     current_time = datetime.datetime.now().strftime('%m%d_%H%M%S')
-    directory_name = f"runs/train-svqvae-{dataset}-" + current_time
+    directory_name = f"/scratch/st-sielmann-1/semi-supervised/train-svqvae-{dataset}-" + current_time
     os.makedirs(directory_name, exist_ok=True)
     checkpoints_directory = os.path.join(directory_name, "checkpoints")
     os.makedirs(checkpoints_directory, exist_ok=True)
