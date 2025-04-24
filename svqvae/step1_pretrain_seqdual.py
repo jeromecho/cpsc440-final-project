@@ -121,7 +121,7 @@ if __name__ == '__main__':
     weights = [1.0]*len(cam16_ds) + [4.0]*len(prcc_ds)
     sampler = WeightedRandomSampler(weights, num_samples=len(merged_ds), replacement=True)
     
-    pretrain_loader = DataLoader(merged_ds, batch_size=batch_size, sampler=sampler, num_workers=0)
+    pretrain_loader = DataLoader(merged_ds, batch_size=batch_size, sampler=sampler, num_workers=2)
     
     losses = {}
     for l in range(3):  # SVQVAE1 levels
