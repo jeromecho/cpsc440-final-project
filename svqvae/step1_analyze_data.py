@@ -10,11 +10,21 @@ class PretrainingDataset(Dataset):
         self.transform = transform
         self.crop_size = crop_size
 
-        self.image_paths = [
+        all_image_paths = [
             os.path.join(img_dir, fname)
             for fname in os.listdir(img_dir)
             if fname.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff'))
         ]
+
+        # Filter out corrupted or unreadable images
+        self.image_paths = []
+        for path in all_image_paths:
+            try:
+                with Image.open(path) as img:
+                    img.verify()  # validate image file
+                self.image_paths.append(path)
+            except Exception as e:
+                print(f"Skipping corrupted image: {path} ({e})")
 
     def __len__(self):
         return len(self.image_paths)
