@@ -14,7 +14,6 @@ import time
 from types import SimpleNamespace
 
 def get_wbc_dataset(type):
-    
     mean = data['train']['mean']
     std = data['train']['std']
     
@@ -56,7 +55,7 @@ if __name__ == '__main__':
     save_every = args.save_every
     model_checkpoint = args.checkpoint
     dataset = args.dataset
-    pretrain_dir = os.path.join(*model_checkpoint.split('/')[:-1])
+    pretrain_dir = os.path.dirname(model_checkpoint)
     
     model_config = SimpleNamespace()
     with open(os.path.join(pretrain_dir, 'model_config.py'), 'r') as f:
