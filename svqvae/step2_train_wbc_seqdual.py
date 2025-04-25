@@ -60,7 +60,7 @@ if __name__ == '__main__':
     model_checkpoint = args.checkpoint
     dataset = args.dataset
     training_phase = args.training_phase
-    pretrain_dir = os.path.join(*model_checkpoint.split('/')[:-1])
+    pretrain_dir = os.path.dirname(model_checkpoint)
     
     model_config = SimpleNamespace()
     with open(os.path.join(pretrain_dir, 'model_config.py'), 'r') as f:
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     exec(configs, vars(model_config))
     
     current_time = datetime.datetime.now().strftime('%m%d_%H%M%S')
-    directory_name = f"runs/train-seqdual-{dataset}-{training_phase}-" + current_time
+    directory_name = f"/scratch/st-sielmann-1/semi-supervised/train-seqdual-{dataset}-{training_phase}-" + current_time
     os.makedirs(directory_name, exist_ok=True)
     checkpoints_directory = os.path.join(directory_name, "checkpoints")
     os.makedirs(checkpoints_directory, exist_ok=True)
