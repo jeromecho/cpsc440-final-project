@@ -52,7 +52,7 @@ if __name__ == '__main__':
     device = torch.device('mps') if torch.backends.mps.is_available() else 'cpu'  
     print('using device ', device)
     
-    model_checkpoint = 'checkpoints/train-svqvae-wbc_100-1024_023002/checkpoints/svqvae_best_95.pt'
+    model_checkpoint = '/scratch/st-sielmann-1/semi-supervised/train-svqvae-wbc_100-0424_125707/checkpoints/svqvae_best_93.pt'
     # model_checkpoint = 'checkpoints/train-svqvae-wbc_50-1024_022839/checkpoints/svqvae_best_92.pt'
     # model_checkpoint = 'checkpoints/train-svqvae-wbc_10-1024_022301/checkpoints/svqvae_best_95.pt'
     # model_checkpoint = 'checkpoints/train-svqvae-wbc_1-1024_012902/checkpoints/svqvae_best_98.pt'
@@ -68,7 +68,9 @@ if __name__ == '__main__':
     elif 'wbc_1' in model_checkpoint:
         ds = 'WBC 1'
 
-    pretrain_dir = os.path.join(*model_checkpoint.split('/')[:-1])
+    # ASSUMPTIONS: moved model_config.py from pretrain directory to fine-tuning directory 
+    #              losses.json is the losses.json resulting from fine-tuning
+    pretrain_dir = os.path.dirname(model_checkpoint)
     
     model_config = SimpleNamespace()
     with open(os.path.join(pretrain_dir, 'model_config.py'), 'r') as f:
@@ -111,7 +113,6 @@ if __name__ == '__main__':
     with open(os.path.join(pretrain_dir, 'losses.json'), 'r') as f:
         losses = json.load(f)
     
-    
     for name in losses:
         plt.clf()
         loss = []
@@ -132,14 +133,15 @@ if __name__ == '__main__':
         plt.title(f'Finetune {ds}: {name}')
         plt.xlabel('Epoch')
         
-        plt.savefig(f"output/finetune-{ds.replace(' ','-')}-{name}.png") 
-
+        plt.savefig(f"/scratch/st-sielmann-1/semi-supervised/svqvae/finetune-{ds.replace(' ','-')}-{name}.png") 
 
     mean = [0.7048, 0.5392, 0.5885]
     std = [0.1626, 0.1902, 0.0974]
     
     testing_dataset = get_wbc_dataset('val')
     test_loader = DataLoader(testing_dataset, batch_size=1, shuffle=True, num_workers=2)
+
+    # move the model_config.py file from the source directory to target directory of interest
 
     model.eval()
     y_pred = []
@@ -173,7 +175,7 @@ if __name__ == '__main__':
     plt.ylabel('Ground Truth Labels')
     plt.xlabel('Predicted Labels')
     plt.tight_layout()
-    plt.savefig(f"output/finetune-{ds.replace(' ', '-')}-confusion-matrix.png")
+    plt.savefig(f"/scratch/st-sielmann-1/semi-supervised/svqvae/finetune-{ds.replace(' ', '-')}-confusion-matrix.png")
 
         
     
