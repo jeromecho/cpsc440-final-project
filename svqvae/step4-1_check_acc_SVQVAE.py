@@ -16,6 +16,7 @@ import seaborn as sns
 import pandas as pd
 from types import SimpleNamespace
 import os
+from torch.utils.data import Subset
 
 def denormalize_img(img, mean, std):
     for t,m,s in zip(img, mean, std):
@@ -24,7 +25,7 @@ def denormalize_img(img, mean, std):
     img = torch.clamp(img, 0,1)
     return img.permute((1,2,0))
 
-def get_wbc_dataset(type):
+def get_wbc_dataset(type, limit = None):
     
     mean = data['train']['mean']
     std = data['train']['std']
@@ -46,6 +47,11 @@ def get_wbc_dataset(type):
     path = data['train']['paths'][type]
 
     dataset = ImageFolder(root=path, transform=transform)
+
+    # ✅ Only use a subset of the data
+    if limit is not None:
+        dataset = Subset(dataset, range(limit))
+
     return dataset
 
 if __name__ == '__main__':
@@ -138,7 +144,7 @@ if __name__ == '__main__':
     mean = [0.7048, 0.5392, 0.5885]
     std = [0.1626, 0.1902, 0.0974]
     
-    testing_dataset = get_wbc_dataset('val')
+    testing_dataset = get_wbc_dataset('val', limit=2)
     test_loader = DataLoader(testing_dataset, batch_size=1, shuffle=True, num_workers=2)
 
     # move the model_config.py file from the source directory to target directory of interest
