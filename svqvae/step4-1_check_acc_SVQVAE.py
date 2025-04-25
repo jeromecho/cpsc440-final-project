@@ -144,7 +144,7 @@ if __name__ == '__main__':
     mean = [0.7048, 0.5392, 0.5885]
     std = [0.1626, 0.1902, 0.0974]
     
-    testing_dataset = get_wbc_dataset('val', limit=2)
+    testing_dataset = get_wbc_dataset('val')
     test_loader = DataLoader(testing_dataset, batch_size=1, shuffle=True, num_workers=2)
 
     # move the model_config.py file from the source directory to target directory of interest
