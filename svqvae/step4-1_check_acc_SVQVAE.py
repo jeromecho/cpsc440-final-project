@@ -58,7 +58,8 @@ if __name__ == '__main__':
     device = torch.device('mps') if torch.backends.mps.is_available() else 'cpu'  
     print('using device ', device)
     
-    model_checkpoint = '/scratch/st-sielmann-1/semi-supervised/train-svqvae-wbc_100-0424_125707/checkpoints/svqvae_best_93.pt'
+    model_checkpoint = '/scratch/st-sielmann-1/semi-supervised/train-svqvae-wbc_100-0425_140302/checkpoints/svqvae_best_89.pt'
+
     # model_checkpoint = 'checkpoints/train-svqvae-wbc_50-1024_022839/checkpoints/svqvae_best_92.pt'
     # model_checkpoint = 'checkpoints/train-svqvae-wbc_10-1024_022301/checkpoints/svqvae_best_95.pt'
     # model_checkpoint = 'checkpoints/train-svqvae-wbc_1-1024_012902/checkpoints/svqvae_best_98.pt'
