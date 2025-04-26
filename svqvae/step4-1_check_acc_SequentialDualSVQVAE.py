@@ -50,7 +50,8 @@ if __name__ == '__main__':
     
     # Choose one of the following checkpoint paths or set your own.
     # Update to your checkpoint path
-    model_checkpoint = 'runs/train-seqdual-wbc_100-classifier-XXXXXX/checkpoints/seqdual_model_final.pt'
+    model_checkpoint = '/scratch/st-sielmann-1/semi-supervised/train-seqdual-wbc_100-classifier-0425_135739/checkpoints/seqdual_model_final.pt'
+
     # model_checkpoint = 'runs/train-seqdual-wbc_50-classifier-XXXXXX/checkpoints/seqdual_model_final.pt'
     # model_checkpoint = 'runs/train-seqdual-wbc_10-classifier-XXXXXX/checkpoints/seqdual_model_final.pt'
     # model_checkpoint = 'runs/train-seqdual-wbc_1-classifier-XXXXXX/checkpoints/seqdual_model_final.pt'
@@ -66,7 +67,7 @@ if __name__ == '__main__':
     elif 'wbc_1' in model_checkpoint:
         ds = 'WBC 1'
 
-    pretrain_dir = os.path.join(*model_checkpoint.split('/')[:-1])
+    pretrain_dir = os.path.dirname(model_checkpoint)
     
     model_config = SimpleNamespace()
     with open(os.path.join(pretrain_dir, 'model_config.py'), 'r') as f:
@@ -137,7 +138,7 @@ if __name__ == '__main__':
         plt.title(f'Sequential DualSVQVAE {ds}: {name}')
         plt.xlabel('Epoch')
         
-        plt.savefig(f"output/seqdual-{ds.replace(' ','-')}-{name}.png") 
+        plt.savefig(f"/scratch/st-sielmann-1/semi-supervised/svqvae_dual/seqdual-{ds.replace(' ','-')}-{name}.png") 
 
     # Run evaluation on test set
     mean = [0.7048, 0.5392, 0.5885]
@@ -181,4 +182,4 @@ if __name__ == '__main__':
     plt.ylabel('Ground Truth Labels')
     plt.xlabel('Predicted Labels')
     plt.tight_layout()
-    plt.savefig(f"output/seqdual-{ds.replace(' ', '-')}-confusion-matrix.png")
+    plt.savefig(f"/scratch/st-sielmann-1/semi-supervised/svqvae_dual/seqdual-{ds.replace(' ', '-')}-confusion-matrix.png")
