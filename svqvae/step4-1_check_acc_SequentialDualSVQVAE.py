@@ -1,4 +1,5 @@
 import torch
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 from models.seq_dual_svqvae import SequentialDualSVQVAE
 import argparse
 from torchvision import transforms
@@ -188,3 +189,24 @@ if __name__ == '__main__':
     plt.xlabel('Predicted Labels')
     plt.tight_layout()
     plt.savefig(f"/scratch/st-sielmann-1/semi-supervised/svqvae_dual/seqdual-{ds.replace(' ', '-')}-confusion-matrix.png")
+    from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
+
+    # Compute test metrics
+    precision = precision_score(y_actual, y_pred, average='weighted')
+    recall = recall_score(y_actual, y_pred, average='weighted')
+    f1 = f1_score(y_actual, y_pred, average='weighted')
+    accuracy = accuracy_score(y_actual, y_pred)
+
+    # Save metrics to a JSON file
+    metrics = {
+        "precision": precision,
+        "recall": recall,
+        "f1_score": f1,
+        "accuracy": accuracy
+    }
+
+    metrics_path = f"/scratch/st-sielmann-1/semi-supervised/svqvae_dual/seqdual-{ds.replace(' ','-')}-metrics.json"
+    with open(metrics_path, 'w') as f:
+        json.dump(metrics, f, indent=4)
+
+    print(f"Saved test metrics to {metrics_path}")

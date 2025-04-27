@@ -1,4 +1,5 @@
 import torch
+from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score
 import argparse
 from models.svqvae import SVQVAE
 from torchvision import transforms
@@ -190,6 +191,26 @@ if __name__ == '__main__':
     plt.tight_layout()
     plt.savefig(f"/scratch/st-sielmann-1/semi-supervised/svqvae/finetune-{ds.replace(' ', '-')}-confusion-matrix.png")
 
+    # Compute metrics
+    precision = precision_score(y_actual, y_pred, average='weighted')
+    recall = recall_score(y_actual, y_pred, average='weighted')
+    accuracy = accuracy_score(y_actual, y_pred)
+    f1 = f1_score(y_actual, y_pred, average='weighted')
+
+    metrics = {
+        'precision': precision,
+        'recall': recall,
+        'accuracy': accuracy,
+        'f1_score': f1
+    }
+
+    # Save metrics to a JSON file
+    metrics_path = f"/scratch/st-sielmann-1/semi-supervised/svqvae/finetune-{ds.replace(' ', '-')}-metrics.json"
+    with open(metrics_path, 'w') as f:
+        json.dump(metrics, f, indent=4)
+
+    print(f"Saved metrics to {metrics_path}")
+
+            
         
-    
-    
+        
