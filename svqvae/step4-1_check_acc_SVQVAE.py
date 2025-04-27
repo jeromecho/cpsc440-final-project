@@ -55,11 +55,16 @@ def get_wbc_dataset(type, limit = None):
     return dataset
 
 if __name__ == '__main__':
-    device = torch.device('mps') if torch.backends.mps.is_available() else 'cpu'  
+    device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
     print('using device ', device)
-    
-    model_checkpoint = '/scratch/st-sielmann-1/semi-supervised/train-svqvae-wbc_100-0425_140302/checkpoints/svqvae_best_89.pt'
 
+    parser = argparse.ArgumentParser(description="Sequential DualSVQVAE training config")
+    parser.add_argument('--model_checkpoint', type=str, required=True, help='Path to model checkpoint')
+    args = parser.parse_args()
+
+    # Choose one of the following checkpoint paths or set your own.
+    # Update to your checkpoint path
+    model_checkpoint = args.model_checkpoint
     # model_checkpoint = 'checkpoints/train-svqvae-wbc_50-1024_022839/checkpoints/svqvae_best_92.pt'
     # model_checkpoint = 'checkpoints/train-svqvae-wbc_10-1024_022301/checkpoints/svqvae_best_95.pt'
     # model_checkpoint = 'checkpoints/train-svqvae-wbc_1-1024_012902/checkpoints/svqvae_best_98.pt'

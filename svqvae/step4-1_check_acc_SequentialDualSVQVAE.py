@@ -45,12 +45,16 @@ def get_wbc_dataset(type):
     return dataset
 
 if __name__ == '__main__':
-    device = torch.device('mps') if torch.backends.mps.is_available() else 'cpu'  
+    device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
     print('using device ', device)
-    
+
+    parser = argparse.ArgumentParser(description="Sequential DualSVQVAE training config")
+    parser.add_argument('--model_checkpoint', type=str, required=True, help='Path to model checkpoint')
+    args = parser.parse_args()
+
     # Choose one of the following checkpoint paths or set your own.
     # Update to your checkpoint path
-    model_checkpoint = '/scratch/st-sielmann-1/semi-supervised/train-seqdual-wbc_100-classifier-0425_135739/checkpoints/seqdual_model_final.pt'
+    model_checkpoint = args.model_checkpoint
 
     # model_checkpoint = 'runs/train-seqdual-wbc_50-classifier-XXXXXX/checkpoints/seqdual_model_final.pt'
     # model_checkpoint = 'runs/train-seqdual-wbc_10-classifier-XXXXXX/checkpoints/seqdual_model_final.pt'
