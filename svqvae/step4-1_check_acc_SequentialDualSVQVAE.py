@@ -1,5 +1,6 @@
 import torch
 from models.seq_dual_svqvae import SequentialDualSVQVAE
+import argparse
 from torchvision import transforms
 from torch.utils.data import DataLoader
 from tqdm import tqdm

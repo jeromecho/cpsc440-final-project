@@ -1,4 +1,5 @@
 import torch
+import argparse
 from models.svqvae import SVQVAE
 from torchvision import transforms
 from step1_analyze_data import PretrainingDataset
