@@ -79,7 +79,7 @@ if __name__ == '__main__':
     
     num_gpus = 1
     if torch.cuda.is_available():
-        device = torch.device('cuda:0') 
+        device = torch.device('cuda') 
         device_index = torch.cuda.current_device()
         device_name = torch.cuda.get_device_name(device_index)
         num_gpus = torch.cuda.device_count()
@@ -271,7 +271,7 @@ if __name__ == '__main__':
         if losses['epoch_test_acc'][-1] > best_test_acc:
             best_test_acc = losses['epoch_test_acc'][-1]
             
-            if best_test_acc > 0.85:
+            if best_test_acc > 0.4:
                 torch.save({
                     'model_state_dict':  model.state_dict(),
                     'optimizer_state_dict': optimizer.state_dict(),
